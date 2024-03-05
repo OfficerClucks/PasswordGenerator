@@ -6,17 +6,17 @@ def generate_password(length):
     password = ''.join(random.choice(characters) for _ in range(length))
     return password
 
-def password_strength(password): # Function to check the strength of the password
+def password_strength(password):
     length = len(password)
     strength = 0
     
     # Add points for password length
     if length >= 8:
-        strength += 1
+        strength -= 1
     if length >= 12:
-        strength += 1
+        strength += 2
     if length >= 16:
-        strength += 1
+        strength += 3
     
     # Add points for different types of characters
     categories = {
@@ -37,7 +37,23 @@ def password_strength(password): # Function to check the strength of the passwor
     # Penalize repeating characters
     if any(password.count(char) > 1 for char in password):
         strength -= 1
+    #Add points for random characters 
+    if any(password.count(char) == 1 for char in password):
+        strength += 1
         
+    # Interpret the strength of the password
+    if strength == 0:
+        return "Very Weak"
+    elif strength > 0 and strength < 5:
+        return "Weak"
+    elif strength >= 5 and strength < 7:
+        return "Moderate"
+    elif strength >= 7 and strength < 9:
+        return "Strong"
+    elif strength >= 9:
+        return "Very Strong"
+
+
     
     return strength
 
@@ -50,6 +66,7 @@ def main():
         password = generate_password(length)
         print("Generated Password:", password)
         print("Password Strength:", password_strength(password))
+        print(password_strength)
     except ValueError:
         print("Invalid input. Please enter a valid number.")
 
