@@ -34,7 +34,10 @@ def password_strength(password): # Function to check the strength of the passwor
     ]
     if any(pattern in password.lower() for pattern in common_patterns):
         strength -= 1
-
+    # Penalize repeating characters
+    if any(password.count(char) > 1 for char in password):
+        strength -= 1
+        
     
     return strength
 
@@ -46,6 +49,7 @@ def main():
             return
         password = generate_password(length)
         print("Generated Password:", password)
+        print("Password Strength:", password_strength(password))
     except ValueError:
         print("Invalid input. Please enter a valid number.")
 
