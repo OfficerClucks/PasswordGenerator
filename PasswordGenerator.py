@@ -12,7 +12,7 @@ def password_strength(password):
     
     # Add points for password length
     if length >= 8:
-        strength -= 1
+        strength += 1
     if length >= 12:
         strength += 2
     if length >= 16:
@@ -40,22 +40,27 @@ def password_strength(password):
     #Add points for random characters 
     if any(password.count(char) == 1 for char in password):
         strength += 1
+    # Add points for complete words
+    if any(password.count(char) > 2 for char in password):
+        strength -= 1
+        
+    
         
     # Interpret the strength of the password
     if strength == 0:
         return "Very Weak"
-    elif strength > 0 and strength < 5:
+    elif 0 < strength < 5:
         return "Weak"
-    elif strength >= 5 and strength < 7:
+    elif 5 <= strength < 7:
         return "Moderate"
-    elif strength >= 7 and strength < 9:
+    elif 7 <= strength < 9:
         return "Strong"
     elif strength >= 9:
         return "Very Strong"
+    else:
+        return strength
 
 
-    
-    return strength
 
 def main():
     try:
@@ -64,9 +69,10 @@ def main():
             print("Please enter a positive number.")
             return
         password = generate_password(length)
+        #added print statements to display the password and its strength
         print("Generated Password:", password)
         print("Password Strength:", password_strength(password))
-        print(password_strength)
+        
     except ValueError:
         print("Invalid input. Please enter a valid number.")
 
